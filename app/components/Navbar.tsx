@@ -3,23 +3,17 @@ import Link from 'next/link';
 import NavLink from './NavLink';
 import Image from 'next/image';
 import Button from './Button';
-
 interface NavbarProps {
   isLoggedIn: boolean;
 }
-
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
   return (
     <div className="navbar bg-base-100">
       {/* Logo and company name */}
-    
       <div className="navbar-start">      
         <Image src={"Vectorlogo.svg"} alt="Company Logo" width={24} height={24} />
         <span className="text-xl ml-2">Travel Companion</span>
-      
       </div>
-   
-
       {/* Navigation links */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
@@ -30,15 +24,13 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
           <li><NavLink href="/contact">Contact</NavLink></li>
         </ul>
       </div>
-
       {/* Conditional rendering for buttons */}
       <div className="navbar-end">
         {isLoggedIn ? (
-          <Link href="/register">
+          <Link href="/login">
             <Button className="btn-active btn-primary text-white ">Dashboard</Button>
           </Link>
         ) : (
-         
           <div className='
           flex
           justify-between
