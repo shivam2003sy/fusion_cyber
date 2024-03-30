@@ -75,7 +75,7 @@ const hotels = [
 export default function Home() {
   return (
     <div>
-      <Navbar isLoggedIn={true} />
+      <Navbar isLoggedIn={false} />
       <Hero />
       <div className='mt-8'>
         <Alert>
