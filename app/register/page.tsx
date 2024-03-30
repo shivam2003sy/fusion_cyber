@@ -98,7 +98,7 @@ const RegisterPage = () => {
                   error={formErrors.confirmPassword || errors.confirmPassword}
                 />
                 {formErrors.password && ( // Display password mismatch error
-                  <p className="text-red-500">Passwords don't match</p>
+                  <p className="text-red-500">Passwords don&apos;t match</p>
                 )}
                 <button
                   type="submit"

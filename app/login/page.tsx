@@ -90,7 +90,9 @@ export default function LoginForm() {
           <div className=" text-center">
             <GoogleLogin />
             <FacebookLogin />
-            <p className="mt-4">Don't have an account? <Link href="/register" className="text-blue-500">Register</Link></p>
+            <p className="mt-4">
+             
+            Don&apos;t have an account? <Link href="/register" className="text-blue-500">Register</Link></p>
           </div>
         </div>
       </div>  
