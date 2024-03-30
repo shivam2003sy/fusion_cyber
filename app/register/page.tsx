@@ -6,6 +6,13 @@ import * as z from 'zod';
 import NavLogoBar from '../components/NavLogoBar';
 import InputField from '../components/Input';
 import axios from 'axios';
+
+interface FormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 const emailSchema = z.object({
   email: z.string().email().min(1),
 });
@@ -18,15 +25,20 @@ const RegisterPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [step, setStep] = useState(1);
   const [formErrors, setFormErrors] = useState({});
-  const onSubmitEmail = async (data) => {
+  const onSubmitEmail = async (data :any ) => {
     try {
       await emailSchema.parseAsync(data);
       setStep(2);
     } catch (error) {
-      setFormErrors(error.formErrors);
+      setFormErrors(
+        {
+          errors : error,
+          email: true
+        })
+
     }
   };
-  const onSubmitPassword = async (data) => {
+  const onSubmitPassword = async (data : any ) => {
     try {
       await passwordSchema.parseAsync(data);
       if (data.password !== data.confirmPassword) {
@@ -49,7 +61,10 @@ const RegisterPage = () => {
 
       router.push('/login');
     } catch (error) {
-      setFormErrors({...error.formErrors, password: true}); 
+      setFormErrors({
+        errors : error,
+        password: true
+      }) 
     }
   };
   return (
@@ -66,7 +81,7 @@ const RegisterPage = () => {
                   name="email"
                   type="email"
                   register={register}
-                  error={formErrors.email || errors.email}
+                  
                 />
                 <button
                   type="submit"
@@ -88,18 +103,17 @@ const RegisterPage = () => {
                   name="password"
                   type="password"
                   register={register}
-                  error={formErrors.password || errors.password} // Display password length error
                 />
                 <InputField
                   label="Confirm Password"
                   name="confirmPassword"
                   type="password"
                   register={register}
-                  error={formErrors.confirmPassword || errors.confirmPassword}
+                  
                 />
-                {formErrors.password && ( // Display password mismatch error
+                {/* {formErrors.password && ( // Display password mismatch error
                   <p className="text-red-500">Passwords don&apos;t match</p>
-                )}
+                )} */}
                 <button
                   type="submit"
                   className="bg-[#2F80ED] text-white w-full py-3 rounded mb-4"

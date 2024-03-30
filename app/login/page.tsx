@@ -22,6 +22,13 @@ const schema = z.object({
   password: z.string().min(6),
 });
 
+interface LoginError {
+  email?: string;
+  password?: string;
+  type: string;
+}
+
+
 export default function LoginForm() {
   const router = useRouter()
   const {setIsLoggedIn} = React.useContext(AppContext)
@@ -47,7 +54,7 @@ export default function LoginForm() {
       if (error instanceof z.ZodError) {
         error.errors.forEach(err => {
           if (err.path) {
-            setError(err.path.join('.'), {
+            setError(err.path[0] as keyof FormData, {
               type: "manual",
               message: err.message
             });
