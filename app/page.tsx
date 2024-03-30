@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -5,6 +6,8 @@ import Alert from './components/Alert';
 import Link from 'next/link';
 import Button from './components/Button';
 import Card from './components/Card';
+
+
 
 const vacation = [
   {
@@ -72,10 +75,17 @@ const hotels = [
   }
 ];
 
-export default function Home() {
+
+
+import {AppContext} from './context/index';
+
+export default function Home(){
+
+  const {isloggedIn} = React.useContext(AppContext);
+  
   return (
-    <div>
-      <Navbar isLoggedIn={false} />
+<div>
+      <Navbar isLoggedIn={isloggedIn} />
       <Hero />
       <div className='mt-8'>
         <Alert>
@@ -123,11 +133,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-
-          
- 
-
-
     </div>
   )
 }

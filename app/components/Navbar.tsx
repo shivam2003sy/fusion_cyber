@@ -37,10 +37,10 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
           items-center
           space-x-1'
           >
-            <Link href="/login">
+            <Link href="/register">
               <Button className="btn-outline  btn-primary   text-primary">Register</Button>
             </Link>
-            <Link href="/register">
+            <Link href="/login">
               <Button  
               className="btn-active btn-primary text-white">Sign In</Button>
             </Link>
