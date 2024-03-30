@@ -1,4 +1,5 @@
 "use server"
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import {z} from "zod";
@@ -8,7 +9,14 @@ const loginSchema = z.object({
     password: z.string().min(6),
 });
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+type NextApiRequestWithFormData = NextApiRequest &
+  Request & {
+    files: any[];
+  };
+
+type NextApiResponseCustom = NextApiResponse & Response;
+
+export async function POST(req: NextApiRequestWithFormData, res: NextApiResponseCustom) {
 
     try {
         const body = await req.json();

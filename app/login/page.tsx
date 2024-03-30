@@ -24,7 +24,7 @@ const schema = z.object({
 
 export default function LoginForm() {
   const router = useRouter()
-  const {isloggedIn , setIsLoggedIn} = React.useContext(AppContext)
+  const {setIsLoggedIn} = React.useContext(AppContext)
 
   const { register, handleSubmit, formState: { errors }, setError } = useForm<FormData>();
   const onSubmit = async (data: FormData) => {
