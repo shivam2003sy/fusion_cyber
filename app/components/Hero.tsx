@@ -5,7 +5,7 @@ import './hero.css';
 
 const Hero = () => {
   return (
-    <>
+  
       <div className="carousel w-full relative">
         <div id="item1" className="carousel-item w-full relative">
           <Image
@@ -13,7 +13,7 @@ const Hero = () => {
             alt="Picture of hero"
             width={1240}
             height={600}
-            layout="responsive"
+            priority  
             className="w-full"
           />
           <div className="absolute bottom-0 w-full text-center mb-2">
@@ -35,7 +35,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

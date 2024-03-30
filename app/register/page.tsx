@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -6,6 +6,8 @@ import * as z from 'zod';
 import NavLogoBar from '../components/NavLogoBar';
 import InputField from '../components/Input';
 import axios from 'axios';
+import { AppContext} from '../context/index'
+import { FacebookLogin , GoogleLogin } from '../components/SocialLogin';
 
 interface FormData {
   email: string;
@@ -14,59 +16,89 @@ interface FormData {
 }
 
 const emailSchema = z.object({
-  email: z.string().email().min(1),
+  email: z.string().email(),
 });
 const passwordSchema = z.object({
   password: z.string().min(6),
   confirmPassword: z.string(),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 });
 const RegisterPage = () => {
+  const {setIsLoggedIn} = React.useContext(AppContext)
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } ,setError  } = useForm<FormData>();
   const [step, setStep] = useState(1);
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState(false);
+
   const onSubmitEmail = async (data :any ) => {
     try {
       await emailSchema.parseAsync(data);
       setStep(2);
     } catch (error) {
-      setFormErrors(
-        {
-          errors : error,
-          email: true
-        })
-
+      if (error instanceof z.ZodError) {
+        error.errors.forEach(err => {
+          if (err.path) {
+            setError(err.path[0] as keyof FormData, {
+              type: "manual",
+              message: err.message
+            });
+          }
+        });
+      }
     }
   };
-  const onSubmitPassword = async (data : any ) => {
+
+  const onSubmitPassword = async (data :any ) => {
+    console.log(data);
     try {
       await passwordSchema.parseAsync(data);
       if (data.password !== data.confirmPassword) {
-        throw new Error("Passwords don't match");
+        setFormErrors(true);
+        return;
       }
-      console.log('Account created!' , data);
-
+    
       const newData = {
         email: data.email,
         password: data.password
       }
+      // const response = await axios.post('/api/login',{
+      //   data: newData, 
+      //   headers : {
+      //     'Content-Type' : 'application/json'
+      //   }
+      // });
+      // console.log(response.data);
+      // console.log('Account created!' , data);
+
+      // router.push('/login');
       const response = await axios.post('/api/login',{
         method : 'POST',
-        body :newData,
+        body :data,
         headers : {
           'Content-Type' : 'application/json'
         }
       });
       console.log(response.data);
-
-      router.push('/login');
+      setIsLoggedIn(true);
+      router.push('/');
     } catch (error) {
-      setFormErrors({
-        errors : error,
-        password: true
-      }) 
+      if (error instanceof z.ZodError) {
+        error.errors.forEach(err => {
+          if (err.path) {
+            setError(err.path[0] as keyof FormData, { // corrected error path
+              type: "manual",
+              message: err.message
+            });
+          }
+        });
+      } else {
+        console.error('Register error:', error);
+      }
     }
   };
+
   return (
     <div>
       <NavLogoBar />
@@ -81,7 +113,7 @@ const RegisterPage = () => {
                   name="email"
                   type="email"
                   register={register}
-                  
+                  error={errors.email}
                 />
                 <button
                   type="submit"
@@ -90,6 +122,17 @@ const RegisterPage = () => {
                   Continue with Email
                 </button>
               </form>
+              <div className="mt-8 flex inline-block">
+            <hr className="mt-3 flex-grow border-gray-300" />
+            <span className="mx-2">or use one of these options</span>
+            <hr className=" mt-3 flex-grow border-gray-300" />
+          </div>
+          <FacebookLogin />
+          <GoogleLogin />
+          <p className=" mt-8 text-center text-gray-600">
+            Already have an account? <a href="/login" className="text-blue-500">Sign in</a>
+          </p>
+        
             </>
           ) : (
             <>
@@ -103,17 +146,18 @@ const RegisterPage = () => {
                   name="password"
                   type="password"
                   register={register}
+                  error={errors.password}
                 />
                 <InputField
                   label="Confirm Password"
                   name="confirmPassword"
                   type="password"
                   register={register}
-                  
+                  error={errors.confirmPassword}
                 />
-                {/* {formErrors.password && ( // Display password mismatch error
+                {formErrors && ( 
                   <p className="text-red-500">Passwords don&apos;t match</p>
-                )} */}
+                )}
                 <button
                   type="submit"
                   className="bg-[#2F80ED] text-white w-full py-3 rounded mb-4"
@@ -121,11 +165,12 @@ const RegisterPage = () => {
                   Create account
                 </button>
               </form>
-            </>
-          )}
-          <p className=" mt-8 text-start text-gray-600">
+              <p className=" mt-8 text-start text-gray-600">
             By creating an account, you agree with our <a href="/login" className="text-blue-500">Terms and Conditions</a> and <a href="/login" className="text-blue-500">Privacy Statement.</a>
           </p>
+            </>
+          )}
+          
         </div>
       </div>
     </div>
