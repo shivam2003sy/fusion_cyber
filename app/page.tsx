@@ -76,6 +76,14 @@ const hotels = [
 ];
 
 
+const images = [
+  { src: 'hero.svg', alt: 'Image 1', width: 1240, height: 600 },
+  { src: 'hero.svg', alt: 'Image 2', width: 1240, height: 600 },
+  { src: 'hero.svg', alt: 'Image 3', width: 1240, height: 600 },
+];
+
+
+
 
 import {AppContext} from './context/index';
 
@@ -86,7 +94,7 @@ export default function Home(){
   return (
 <div>
       <Navbar isLoggedIn={isloggedIn} />
-      <Hero />
+      <Hero images={images} />
       <div className='mt-8'>
         <Alert>
           <span>

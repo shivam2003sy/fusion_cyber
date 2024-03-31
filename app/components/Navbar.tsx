@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
       {/* Conditional rendering for buttons */}
       <div className="navbar-end">
         {isLoggedIn ? (
-          <Link href="/login">
+          <Link href="#">
             <Button className="btn-active btn-primary text-white ">Dashboard</Button>
           </Link>
         ) : (
